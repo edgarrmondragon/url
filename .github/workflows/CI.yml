@@ -154,10 +154,14 @@ jobs:
 
   windows:
     needs: test
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [windows-latest]
         target: [x64, x86]
+        include:
+        - os: windows-11-arm
+          target: arm
     steps:
       - uses: actions/checkout@v4
         with:
@@ -189,11 +193,15 @@ jobs:
   # we must build free-threaded separately
   windows-free-threaded:
     needs: test
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
+        os: [windows-latest]
         target: [x64, x86] # x86 is not supported by pypy
+        include:
+        - os: windows-11-arm
+          target: arm64
     steps:
       - uses: actions/checkout@v4
         with:
